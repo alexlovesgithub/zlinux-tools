@@ -62,7 +62,7 @@
 # TO ACTIVATE THE PERFKIT MONITORING FUNCTION ON YOUR NMON FIRST CREATE ON YOUR VM A CMS MACHINE CALLED CSVGEN
 # WITH THE FOLLOWING USER DEFINITION:
 #
-# USER CSVGEN PDDUCUL 32M 32M G                                         
+# USER CSVGEN CSVPASSWD 32M 32M G                                         
 #   CPU 00 BASE                                                        
 #   IPL CMS PARM AUTOCR                                                
 #   MACHINE ESA 1                                                      
