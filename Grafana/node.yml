@@ -1,0 +1,12 @@
+groups:
+  - name: node_exporter_rules
+    interval: 30s
+    rules:
+    - record: node_cpu_all
+      expr: avg(irate(node_cpu[30s])*100) by (mode,instance,job)
+
+  - name: system_info
+    interval: 30s
+    rules:
+    - record: node_cpu_threads_count
+      expr: count by (instance,job) (count by(cpu,instance,job)(node_cpu))

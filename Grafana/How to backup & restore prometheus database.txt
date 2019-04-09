@@ -1,0 +1,53 @@
+1) Enable Admin API
+
+# vim /etc/systemd/system/prometheus.service
+
+Add "--web.enable-admin-api" parameter when you start prometheus if needed.
+
+ExecStart=/home/prometheus-2.3.0.linux-amd64/prometheus --config.file=/home/prometheus-2.3.0.linux-amd64/prometheus.yml --storage.tsdb.retention=999d --web.enable-admin-api
+
+# systemctl daemon-reload
+# systemctl restart prometheus.service
+
+
+
+2) Take a snapshot
+
+#  curl -XPOST http://localhost:9090/api/v1/admin/tsdb/snapshot
+
+
+
+3) Backup this snapshot
+
+Copy new directory which has been created in /data/snapshots
+
+
+
+4) Restore this snapshot
+
+Copy this directory on the server where you want to restore your backup
+
+Make parameter  "--storage.tsdb.path" point to it.
+
+# vim /etc/systemd/system/prometheus.service
+
+Add "--storage.tsdb.path=/home/mysnapshot/" parameter when you start prometheus if needed.
+
+ExecStart=/home/prometheus-2.3.0.linux-amd64/prometheus --config.file=/home/prometheus-2.3.0.linux-amd64/prometheus.yml --storage.tsdb.retention=999d --web.enable-admin-api --storage.tsdb.path=/home/20181129T153724Z-43142c3705204f91/
+
+# systemctl daemon-reload
+# systemctl restart prometheus.service
+
+
+
+5) Configure your Grafana to point to this snapshot
+
+Create a new datasource which point to the server where you have restored your snapshot.
+
+Import "Node Exporter Full - Custom"
+Replace the old datasource by the new one if it's not the same name.
+
+Import "Node Exporter Server Metrics - Custom"
+Replace the old datasource by the new one if it's not the same name.
+
+And, it's done ! :)

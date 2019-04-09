@@ -1,0 +1,32 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+ - rules/*
+
+# A scrapeconfiguration containingexactlyone endpointto scrape:
+# Hereit'sPrometheusitself.
+
+scrape_configs:
+
+# The job nameisaddedas a label `job=<job_name>` to anytimeseriesscrapedfromthisconfig.
+ - job_name: 'prometheus'
+   static_configs:
+    - targets: ['localhost:9090']
+  
+ - job_name: 'linux'
+   static_configs:
+   - targets: ['nationw1:9100', 'nationw2:9100', 'nationw3:9100', 'nationw4:9100', 'nationw5:9100', 'nationw6:9100', 'nationw7:9100']
+     labels:
+       group: 'linux'
