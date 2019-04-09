@@ -1,0 +1,90 @@
+#!/bin/sh
+#==============================================================================
+# Written by Sylvain Carta - IBM ATS PSSC Montpellier. sylvain_carta@fr.ibm.com
+# --- April 2005 ---
+#==============================================================================
+function upper() {
+	echo $1 | tr [:lower:] [:upper:]
+}
+
+. ./run_variables
+
+command=$(basename $0)
+procid=$$
+action=$1
+machine=$2
+filein=$3
+format=$4
+ftpcommand="ftp -n"
+procid=$$
+temprobot=temprobot.${procid}
+temprobottemp=temprobottemp.${procid}
+temprobotout="/dev/null"
+temproboterr="/dev/null"
+siteparam="listf UNIX"
+
+case "${action}" in
+ "put")
+   filestring="${filein} ${filein}"
+  ;;
+ "mput")
+   filestring="${filein}"
+   ftpcommand="ftp -ni"
+  ;;
+ "get")
+   filestring="${filein} ${filein}"
+  ;;
+ "mget")
+   filein=$(basename ${filein})
+   filestring="${filein}"
+   ftpcommand="ftp -ni"
+  ;;
+ "delete")
+   filein=$(basename ${filein})
+   filestring="${filein}"
+  ;;
+ "mdelete")
+   filestring="${filein}"
+   ftpcommand="ftp -ni"
+ ;;
+ "ls")
+   filestring=""
+   temprobotout=${temprobot}
+   temproboterr=${temprobot}
+esac
+[ "${machine}" == "PERFSVM" ] && PASSWORD="${PERFSVMPASSWORD}"
+[ "${machine}" == "CSVGEN" ] && PASSWORD="${CSVGENPASSWORD}"
+${ftpcommand} ${VMSERVERIP} << END_SCRIPT 1>${temprobotout} 2>${temproboterr}
+quote USER ${machine}
+quote PASS ${PASSWORD}
+ascii
+cd ${machine}.191
+site ${siteparam}
+${action} ${filestring}
+quit
+END_SCRIPT
+
+#echo ${ftpcommand} ${VMSERVERIP}
+#echo "Machine =" ${machine}
+#echo "Password =" ${PASSWORD}
+#echo ${action} ${filestring}
+
+if [ "${action}" == "ls" ] ; then 
+ cat ${temprobot} | grep -v "'EPSV'" > ${temprobottemp}
+ mv ${temprobottemp} ${temprobot}
+ if [ "$3" != "" ] ; then
+  if [ `echo "$3" | grep '*' | wc -l` -eq 1 ] ; then
+     cat ${temprobot} | grep `echo "$3" | sed 's/*//g'` | wc -l
+     rm ${temprobot}
+  else
+     cat ${temprobot} | grep $3 | wc -l
+     rm ${temprobot}
+  fi
+ else
+  clear
+  cat ${temprobot} | more
+  rm ${temprobot}
+ fi
+ rm ${temprobot} 1>/dev/null 2>/dev/null
+fi
+exit 0

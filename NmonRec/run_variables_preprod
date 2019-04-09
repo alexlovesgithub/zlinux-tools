@@ -1,0 +1,87 @@
+#!/bin/bash
+
+REMOTE_COMMANDE="ssh -o PasswordAuthentication=no -o StrictHostKeyChecking=no -l root"
+
+DAY=$(date '+%d-%m-%Y')
+DATE=$(date '+%Y%m%d%H%M%S')
+TIME=$(date '+%H%M')
+
+RUN_NAME=TEMENOSTEST
+
+DIR_RESULTS=/opt/NmonRec/${RUN_NAME}/results
+DIR_LOCKFILE=/opt/NmonRec/${RUN_NAME}/results
+
+MACHINES_FILES=/opt/NmonRec/machines_preprod
+ORA_MACHINES_FILES=/opt/NmonRec/ora_machines
+
+VMSERVERIP=10.3.1.10
+PERFSVMPASSWORD="pwd4tem"
+CSVGENPASSWORD="pwd4tem"
+
+DELAY=30
+COUNT=3600
+
+# If you want to use NMON for monitoring, set the value for USE_NMON to Y
+# If you want to use SYSSTAT for monitoring, set the value for USE_SYSSTAT to Y
+# If you want to use PERFKIT for monitoring, set the value for USE_PERFKIT to Y
+USE_NMON="Y"
+USE_SYSSTAT="N"
+USE_PERFKIT="N"
+USE_ORACLE="N"
+
+# change this parameter for using or not a file to store the pids to monitor for all run
+# If this parameter is set to "N", you will have to specify each pid you want to monitor for each machine each time you will start a run
+# If this parameter is set to "Y", you will be asked only at the first run to specify the pids you want to monitor for each machine. Then you will 
+# be able to add or delete pid to monitor by editing the files created
+# These files will be stored in /opt/NmonRec/${RUN_NAME}/${HOSTNAME}.pid 
+PIDFILE="N"
+
+##############################################################################
+
+BASENAME=$0
+
+#if [ `uname` == AIX ] ; then 
+	#LAST_RUN=`ls -1d ${DIR_RESULTS}/${DAY}/${RUN_NAME}* 2>/dev/null | sort -t_ -n +1 | tail -1`
+	#LAST_RUN=`ls -1d ${DIR_RESULTS}/${RUN_ID}* 2>/dev/null | sort -t_ -n +1 | tail -1`
+#else
+	#LAST_RUN=`ls -1d ${DIR_RESULTS}/${DAY}/${RUN_NAME}* 2>/dev/null | sort -t_ -k2 -n | tail -1`
+	#LAST_RUN=`ls -1d ${DIR_RUN}/${RUN_ID}* 2>/dev/null | sort -t_ -k2 -n | tail -1`
+	#LAST_RUN=`ls -1d ${DIR_RESULTS}/${RUN_ID}* 2>/dev/null | sort -t_ -k2 -n | tail -1`
+#fi
+	
+NUM_RUN=`echo $LAST_RUN | cut -d_ -f2`
+
+if [[ $BASENAME = *start_run* ]] ; then
+	NEW_NUM_RUN=`expr $NUM_RUN + 1`
+else
+	NEW_NUM_RUN=$NUM_RUN
+fi
+
+DIR_REMOTE_TMP=/tmp/NmonRec/${RUN_NAME}
+
+
+### RUN ID Syntax ###
+# 1st caracter is the 1st RUN_NAME letter
+# 2nd caracter is the last digit of the year
+# 3rd and 4th caracters are for the month
+# 5th and 6th caracters are for the day
+# 7th caracter is R for Run
+# 8th caracter is the run number for the current day
+
+#RUN_ID_TMP=$(date '+%y%m%d')
+#RUN_ID=${RUN_NAME:0:1}${RUN_ID_TMP:1}R${NEW_NUM_RUN}
+
+if [ -z "$1" ] ; then
+	RUN_ID=$(<run_in_progress)
+else
+	RUN_ID=$1
+fi
+
+DIR_RUN=${DIR_RESULTS}/${RUN_ID}
+
+DIR_REMOTE_TMP=/tmp/NmonRec/${RUN_NAME}
+
+###############################################################################
+
+#NMON_CMD="nmon -s${DELAY} -c${COUNT} -F $DIR_REMOTE_TMP/${NEW_NUM_RUN}/${RUN_NAME}_${NEW_NUM_RUN}"
+NMON_CMD="nmon -s${DELAY} -c${COUNT} -F $DIR_REMOTE_TMP/${RUN_ID}"

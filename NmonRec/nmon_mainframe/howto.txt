@@ -1,0 +1,7 @@
+yum install ncurses-devel.s390x
+
+make nmon_mainframe_rhel7
+
+mv nmon_mainframe_rhel7 /usr/local/sbin/nmon
+
+chmod u+x /usr/local/sbin/nmon

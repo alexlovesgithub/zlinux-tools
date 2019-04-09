@@ -1,0 +1,7 @@
+1/ #!/bin/sh devient #!/bin/bash dans tous les scripts 
+
+2/ sudo apt install at
+
+3/ Remplacer tous les root par le user Ubuntu dans tous les scripts (run_variables et stop_run)
+
+4/ Faire les échanges de certificats

@@ -1,0 +1,452 @@
+***********************************************************************         
+***********************************************************************         
+*                                                                     *         
+**       Initialization profile for 'Performance Toolkit for VM'.    **         
+*        This file is intended for customizing operation by including *         
+*        the necessary 'FCONTROL ....' commands:                      *         
+*                                                                     *         
+*        FCONTROL ...                                                 *         
+*                                                                     *         
+*        .. ACTMSG                                                    *         
+*        .. AUTOREFR                                                  *         
+*        .. BENCHMRK                                                  *         
+*        .. COLOR                                                     *         
+*        .. DEFLOG                                                    *         
+*        .. DEFSCRN                                                   *         
+*        .. DUMPID                                                    *         
+*        .. EMERGENC                                                  *         
+*        .. FORCEUSR                                                  *         
+*        .. GDDMSPEC                                                  *         
+*        .. LIMIT                                                     *         
+*        .. MAINTID                                                   *         
+*        .. MAXREC                                                    *         
+*        .. MINPATHS                                                  *         
+*        .. MODEL                                                     *         
+*        .. MONCACHE                                                  *         
+*        .. MONCOLL                                                   *         
+*        .. MSGCLEAR                                                  *         
+*        .. MSGWAIT                                                   *         
+*        .. NUMBERS                                                   *         
+*        .. PFKEY                                                     *         
+*        .. PROCESS                                                   *         
+*        .. RMTLINES                                                  *         
+*        .. SCROLL                                                    *         
+*        .. SEARCH                                                    *         
+*        .. SECUSER                                                   *         
+*        .. SETEVENT                                                  *         
+*        .. SETTINGS                                                  *         
+*        .. TIMSTAMP                                                  *         
+*        .. UCLASS                                                    *         
+*        .. UPDTCMS                                                   *         
+*        .. UPDTSCRN                                                  *         
+*        .. USERBOTL                                                  *         
+*        .. USERHDR                                                   *         
+*        .. USERVAR                                                   *         
+*        .. USRLIMIT                                                  *         
+*                                                                     *         
+*        See User's Guide or 'HELP' text for command syntax and       *         
+*        meaning of arguments.                                        *         
+*        Other commands can also be included, but they will be        *         
+*        executed only once PERFKIT is fully initialized.             *         
+*                                                                     *         
+***********************************************************************         
+***********************************************************************         
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define number of CP action messages to be left pending           *         
+*    at top of screen (default is 10 messages)                        *         
+*---------------------------------------------------------------------*         
+FC ACTMSG  10                                                                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define an object for which detailed by-time logs                 *         
+*    are to be built (requires additional space in your virtual       *         
+*    storage; activate only when needed).                             *         
+*                                                                     *         
+*    Allowed objects are: I/O device number, user/identity ID,        *         
+*    Logical Link Partner name, End Point ID.                         *         
+*---------------------------------------------------------------------*         
+*C BENCHMRK DEVICE 550      FILE 08:00 TO 17:00                                 
+*C BENCHMRK USER   PERFSVM                                                      
+*C BENCHMRK LLINK  SSIMEMB2                                                     
+*C BENCHMRK EPOINT 00000001                                                     
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define extended highlighting and colors to be used               *         
+*---------------------------------------------------------------------*         
+FC COLOR    TOPDAT    BLUE                                                      
+FC COLOR    TOPSCRL   TURQUOIS                                                  
+FC COLOR    TOPSECU   TURQUOIS                                                  
+FC COLOR    TOPSTAT   YELLOW                                                    
+FC COLOR    NUMBERS   BLUE                                                      
+FC COLOR    ERRMSG    RED                                                       
+FC COLOR    ARROW     WHITE                                                     
+FC COLOR    INAREA    WHITE     UNDER                                           
+FC COLOR    BOTLINE   TURQUOIS                                                  
+FC COLOR    TOFEOF    WHITE                                                     
+FC COLOR    INRED     WHITE                                                     
+FC COLOR    CPMSG     GREEN     REV                                             
+FC COLOR    CPWNG     YELLOW    REV                                             
+FC COLOR    CPMSGN    WHITE                                                     
+FC COLOR    CPOUT     BLUE                                                      
+FC COLOR    CPAMSG    YELLOW                                                    
+FC COLOR    CPEMSG    RED                                                       
+FC COLOR    CPIMSG    YELLOW                                                    
+FC COLOR    CPSCIF    GREEN                                                     
+FC COLOR    VMOUT     GREEN                                                     
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define a new performance log screen, using parts of other        *         
+*    performance screens.                                             *         
+*---------------------------------------------------------------------*         
+FC DEFLOG MYLOG H1 Sample log with some fields copied from SYSTEM screen        
+FC DEFLOG MYLOG COL 12 LEN 5 COPY SYSTEM LINE 12 COL 34 NAME SieEx              
+FC DEFLOG MYLOG COL 18 LEN 5 COPY SYSTEM LINE 12 COL 75 NAME SieInter           
+FC DEFLOG MYLOG COL 25 LEN 13 COPY SYSTEM LINE 25 COL 67 NAME <-No-XSTORE->     
+FC DEFLOG MYLOG COL 39 LEN 13 COPY SYSTEM LINE 26 COL 26 NAME <-XST-Alloc->     
+FC DEFLOG MYLOG COL 53 LEN 13 COPY SYSTEM LINE 26 COL 67 NAME <XST-Release>     
+FC DEFLOG MYLOG COL 67 LEN 13 COPY SYSTEM LINE 18 COL 26 NAME <AV_List_Req>     
+*                                                                               
+*C DEFLOG MYLOG2 H1 Sample log with fields from STORAGE / RESPALL / USER / DEV  
+*C DEFLOG MYLOG2 COL 12 LEN 6 COPY STORAGE LINE 26 COL 74 NAME MDC-Rd           
+*C DEFLOG MYLOG2 COL 20 LEN 6 COPY STORAGE LINE 27 COL 74 NAME MDC-Wr           
+*C DEFLOG MYLOG2 COL 28 LEN 6 COPY STORAGE LINE 28 COL 74 NAME MDC-Ht           
+*C DEFLOG MYLOG2 COL 36 LEN 5 COPY STORAGE LINE 29 COL 74 NAME MDC-%            
+*C DEFLOG MYLOG2 COL 44 LEN 5 COPY RESPALL LINE LAST COL 12 NAME Trv-s          
+*C DEFLOG MYLOG2 COL 51 LEN 5 COPY RESPALL LINE LAST COL 24 NAME NTr-s          
+*C DEFLOG MYLOG2 COL 58 LEN 8 COPY USE LOC 'FTPS' ATC 3 COL 2 NAME Userid       
+*C DEFLOG MYLOG2 COL 68 LEN 6 COPY DEV LOC '0700' ATC 3 COL 14 NAME Serial      
+*C DEFLOG MYLOG2 FILE 08:30 TO 16:30                                            
+*                                                                               
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define a new performance screen, using parts of other perfor-    *         
+*    mance screens.                                                   *         
+*---------------------------------------------------------------------*         
+FC DEFSCRN SYSTSUM LINE  2 TO  9 COPY CPU     FROM 1                            
+FC DEFSCRN SYSTSUM LINE 11 TO 12 COPY DEVICE  FROM 2                            
+FC DEFSCRN SYSTSUM LINE 13 TO 16 COPY DEVICE  FROM 5                            
+FC DEFSCRN SYSTSUM LINE 18 TO 21 COPY CHANNEL FROM 1                            
+FC DEFSCRN SYSTSUM LINE 23 TO 23 COPY USER    FROM 4                            
+FC DEFSCRN SYSTSUM LINE 24 TO 27 COPY USER    FROM 6                            
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define a GENERAL screen                                                    
+*---------------------------------------------------------------------*         
+*C DEFSCRN GENERAL LINE  2 TO  2 COPY USER    FROM 4                            
+*C DEFSCRN GENERAL LINE  3 TO  6 COPY USER    FROM 6                            
+*C DEFSCRN GENERAL LINE  7 TO  7 COPY DEVICE  FROM 2                            
+*C DEFSCRN GENERAL LINE  8 TO 11 COPY DEVICE  FROM 5                            
+*C DEFSCRN GENERAL LINE 12 TO 19 COPY CPU     FROM 1                            
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define destination ID for PERFKIT dumps, in case of an abend     *         
+*---------------------------------------------------------------------*         
+*C DUMPID MAINT                                                                 
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define colors and shading patterns for GDDM graphics             *         
+*---------------------------------------------------------------------*         
+FC GDDMSPEC  VAR1   COL  YELLOW    PAT   5                                      
+FC GDDMSPEC  VAR2   COL  TURQUOIS  PAT  14                                      
+FC GDDMSPEC  VAR3   COL  ORANGE    PAT  12                                      
+FC GDDMSPEC  VAR4   COL  GREEN     PAT   9                                      
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Indicate whether perf. data are to be collected continuously,    *         
+*    even while not in perf. monitor mode, and other performance      *         
+*    monitor related information (valid for privilege class 'E' only) *         
+*    The 'FC MONCOLL ON' statement MUST precede any 'FC EMERGENC',    *         
+*    'FC FORCEUSR', 'FC LIMIT' and 'FC USRLIMIT' commands.            *         
+*---------------------------------------------------------------------*         
+FC MONCOLL REDISP 720                                                           
+*    Following command for MONITOR data extraction from disk file               
+*C MONCOLL CPMON DISK ON MONWRITE 191 B MONFILE DATA                            
+*    Following command for MONITOR data extraction from MONDCSS segment         
+FC MONCOLL CPMON DCSS ON MONDCSS                                                
+*    Following command to start populating formatted output collector           
+FC MONCOLL SEGOUT ON PERFOUT                                                    
+*---------------------------------------------------------------------*         
+* The following FC MONCOLL RESET commands are used to set the times   *         
+* for PRINT, TREND and SUMMARY files                                  *         
+*---------------------------------------------------------------------*         
+* Setup for daily reports                                                       
+FC MONCOLL RESET 00:00:00R_P 23:59:59P                                          
+* Setup for interim reset at midnight                                           
+FC MONCOLL RESET 00:00:00R_I 23:59:59I (MERGE                                   
+* Setup for trend file by shift                                                 
+FC MONCOLL RESET 00:00:00R_T 08:00:00T 16:00:00T (MERGE                         
+* Setup for hourly summary files                                                
+*C MONCOLL RESET 00:00:00R_S 01:00:00S 02:00:00S 03:00:00S (MERGE               
+*C MONCOLL RESET 04:00:00S 05:00:00S 06:00:00S 07:00:00S (MERGE                 
+*C MONCOLL RESET 08:00:00S 09:00:00S 10:00:00S 11:00:00S (MERGE                 
+*C MONCOLL RESET 12:00:00S 13:00:00S 14:00:00S 15:00:00S (MERGE                 
+*C MONCOLL RESET 16:00:00S 17:00:00S 18:00:00S 19:00:00S (MERGE                 
+*C MONCOLL RESET 20:00:00S 21:00:00S 22:00:00S 23:00:00S (MERGE                 
+*    Following command controls the collection of general performance           
+*    data on disk during the specified time period                              
+FC MONCOLL PERFLOG OFF
+*    Following command activates VMCF data retrieval interface                  
+FC MONCOLL VMCF ON                                                              
+*    Define the maximum allowed number of Internet connections                  
+*C MONCOLL WEBSERV MAXCONN 100                                                  
+*    Define the timeout of inactive Internet connections in minutes             
+*C MONCOLL WEBSERV TIMEOUT 30                                                   
+*    Following command activates Internet interface                             
+FC MONCOLL WEBSERV ON TCPIP TCPIP 80                                            
+*    Following command activates Internet interface with SSL                    
+*C MONCOLL WEBSERV ON SSL TCPIP TCPIP 80                                        
+*    Following command activates TCP/IP interface for data retrieval            
+*    from LINUX RMF DDS interface                                               
+FC MONCOLL LINUXUSR ON TCPIP TCPIP                                              
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Activate the Emergency Safeguard Feature (ESF) of PERFKIT        *         
+*---------------------------------------------------------------------*         
+*    Define the actions to be performed at the emergency event                  
+*C EMERGENC EXECPROC MYPROC                                                     
+*C EMERGENC ORDER EXECPROC PRINT INTERIM TREND SUMMARY REMPRINT                 
+*    Enable ESF                                                                 
+*C EMERGENC ON                                                                  
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define thresholds when idle users, and users in a CPU loop       *         
+*    or an I/O loop are to receive warnings and are to be forced      *         
+*    off the system.                                                  *         
+*    CAUTION: use 'TEST' mode first, or specify FORCE limit of '0'    *         
+*    to make sure that the exclude list is complete, and no service   *         
+*    machines are going to be forced!                                 *         
+*---------------------------------------------------------------------*         
+*    Set size of EXCLUDE table                                                  
+FC FORCEUSR EXCLMAX 200                                                         
+*    Define users which are NOT to be forced                                    
+FC FORCEUSR EXCLUDE OP       VTAM*    VSCS*    RACF     RSCS                    
+FC FORCEUSR EXCLUDE MVS*     VMUTIL                                             
+*    Define loop detection criteria                                             
+*C FORCEUSR SETLIM  CPULOOP  MINCPU 10  WSSDELTA 1  MAXWSS 10000                
+*C FORCEUSR SETLIM  IOLOOP   MINIO 500  WSSDELTA 4  MAXWSS 10000                
+*C FORCEUSR SETLIM  WSSLOOP             WSSDELTA 15 MAXWSS 10000                
+*    Define warning and FORCE thresholds (in minutes)                           
+*C FORCEUSR IDLE    NODISC TEST  LIMIT    30/40                                 
+*C FORCEUSR IDLE    DISC         LIMIT    17/20                                 
+FC FORCEUSR IDLE    OFF                                                         
+*C FORCEUSR CPULOOP ALL          LIMIT    5/0                                   
+FC FORCEUSR CPULOOP OFF                                                         
+*C FORCEUSR IOLOOP  ALL          LIMIT    5/0                                   
+FC FORCEUSR IOLOOP OFF                                                          
+*C FORCEUSR WSSLOOP ALL          LIMIT    15/20                                 
+FC FORCEUSR WSSLOOP OFF                                                         
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Set thresholds for some key performance indicators               *         
+*    (can be set only if permanent perf. data collection has          *         
+*    previously been activated)                                       *         
+*---------------------------------------------------------------------*         
+FC LIMIT   NORMCPU  90  1/1  5/10  WEIGHT  1                                    
+*C LIMIT   C1ES   1.00  1/1  5/10  WEIGHT 20                                    
+FC LIMIT   %IQ      50  1/1  5/10  WEIGHT  1                                    
+FC LIMIT   %PQ      30  0/0  5/10  WEIGHT  1                                    
+FC LIMIT   %SPSL    80  0/0  1/10  WEIGHT 40                                    
+FC LIMIT   %PGSL    80  0/0  1/10  WEIGHT 40                                    
+FC LIMIT   %CHBUSY  40  1/1  5/10  WEIGHT  5                                    
+FC LIMIT   DVQUEUE .40  1/1  5/10  WEIGHT  1                                    
+FC LIMIT   DVRESP   30  1/1  5/10  WEIGHT  1                                    
+FC LIMIT   MISSINT   0  0/0  5/10  WEIGHT 10                                    
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define destination ID for high priority alert messages           *         
+*---------------------------------------------------------------------*         
+*C MAINTID MAINT AT mynode                                                      
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define number of records to be written before CLOSE              *         
+*    (default is 10 records)                                          *         
+*---------------------------------------------------------------------*         
+FC MAXREC  12                                                                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Set thresholds for automatic channel path monitoring             *         
+*---------------------------------------------------------------------*         
+*C MINPATHS 2 TO 600-61F LIMIT 0/60 WEIGHT 50                                   
+*C MINPATHS 2 TO 720-73F LIMIT 0/60 WEIGHT 50                                   
+*C MINPATHS 4 TO 840-85F LIMIT 0/60 WEIGHT 20                                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Activate monitoring of cache status for selected disks           *         
+*---------------------------------------------------------------------*         
+*C MONCACHE 720-724 AD*  LIMIT 0/60 WEIGHT 10                                   
+*C MONCACHE 725-72F AA*  LIMIT 0/60 WEIGHT 10                                   
+*C MONCACHE 730-73F A**  LIMIT 0/60 WEIGHT  5                                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Specify action to be taken when CLEAR command is executed,       *         
+*    or PA2 or CLEAR key hit (CP messages and/or PERFKIT action       *         
+*    messages to be cleared too?)                                     *         
+*---------------------------------------------------------------------*         
+FC MSGCLEAR ALL                                                                 
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define delay in minutes for messages to be left on screen        *         
+*    until warning message is displayed (initial value: OFF)          *         
+*---------------------------------------------------------------------*         
+*C MSGWAIT  5                                                                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Specify whether line numbers are to be inserted on left side     *         
+*---------------------------------------------------------------------*         
+FC NUMBERS  OFF                                                                 
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define program function keys                                     *         
+*    Note that the 'FUNCTION' definitions just repeat the initial     *         
+*    definitions, they have been included only to illustrate the      *         
+*    use of the 'FC PFKEY' command.                                   *         
+*---------------------------------------------------------------------*         
+*  Definitions for common functions (basic, redisplay and monitor)              
+FC PFKEY SET  1  FUNCTION HELP                                                  
+FC PFKEY SET  2  FUNCTION REDISP                                                
+FC PFKEY SET  3  FUNCTION QUIT                                                  
+FC PFKEY SET  4  FUNCTION TOP                                                   
+FC PFKEY SET  5  FUNCTION BOTTOM                                                
+FC PFKEY SET  6  FUNCTION SAVE                                                  
+FC PFKEY SET  7  FUNCTION BACKWARD                                              
+FC PFKEY SET  8  FUNCTION FORWARD                                               
+FC PFKEY SET  9  FUNCTION PRINT                                                 
+FC PFKEY SET 10  FUNCTION LEFT                                                  
+FC PFKEY SET 11  FUNCTION RIGHT                                                 
+FC PFKEY SET 12  FUNCTION RETURN                                                
+*                                                                               
+*  Definitions for commands to be executed in basic mode                        
+FC PFKEY SET  4  BASMODE  MONITOR                                               
+*C PFKEY SET  5  BASMODE  ...                                                   
+FC PFKEY SET 11  BASMODE  ?                                                     
+*                                                                               
+*  Definitions for commands to be executed in performance monitor mode          
+*C PFKEY SET  3  MONMODE  ...                                                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Allow special processing for some kinds of output lines          *         
+*---------------------------------------------------------------------*         
+FC PROCESS CPMSG  * 'FROM RSCS' DISP CPMSGN                                     
+*C PROCESS CPO    * 'LOGON' NODISP                                              
+*C PROCESS CPO    * 'LOGOFF' NODISP                                             
+*C PROCESS CPO    * 'RECONNECT' NODISP                                          
+*C PROCESS CPO    * 'DSCONNECT' NODISP                                          
+*C PROCESS CPO    * 'DISCONNECT' NODISP                                         
+*C PROCESS CPO    51 'FORCED' DISPLAY CPO                                       
+*C PROCESS CPMSG  * 'BAND' | * 'TAPE' REROUTE TAPEOP   CPMSGN                   
+*C PROCESS ERRMSG 9 'A'               REROUTE OPERATOR CPMSGN                   
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Set default number of output lines to be retrieved in remote     *         
+*    performance data retrieval mode                                  *         
+*---------------------------------------------------------------------*         
+*C RMTLINES 50                                                                  
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define scroll mode                                               *         
+*---------------------------------------------------------------------*         
+FC SCROLL   AUTO  12                                                            
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define command search order                                      *         
+*---------------------------------------------------------------------*         
+FC SEARCH   CPCMS                                                               
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define USERID for which we are acting as secondary console       *         
+*---------------------------------------------------------------------*         
+FC SECUSER  OFF                                                                 
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define timer events                                              *         
+*---------------------------------------------------------------------*         
+FC SETEVENT M-F 12:00 CP MSG * It is now 12:00h                                 
+*                                                                               
+*---------------------------------------------------------------------*         
+*    General definitions for controlling history file creation        *         
+*    and print output format                                          *         
+*---------------------------------------------------------------------*         
+FC SETTINGS HISTFILE NEW                                                        
+*C SETTINGS MAXDEVS  50                                                         
+*C SETTINGS MAXUSERS 50                                                         
+FC SETTINGS PAGESIZE 60                                                         
+FC SETTINGS INTERIM  60                                                         
+FC SETTINGS SYSTEM   This is a performance report for system XYZ                
+*C SETTINGS SYSTEMID XYZ                                                        
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Control insertion of time-stamp in front of output lines         *         
+*---------------------------------------------------------------------*         
+*C TIMSTAMP ON                                                                  
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define user classes for which group averages are to be calculated*         
+*---------------------------------------------------------------------*         
+*C UCLASS   *    General                                                        
+*C UCLASS   VSE* Guests                                                         
+*C UCLASS   MVS* Guests                                                         
+*C UCLASS   RSCS Service                                                        
+*C UCLASS   VSCS Service                                                        
+*C UCLASS   VTAM Service                                                        
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define screen update mode while CMS command is active            *         
+*---------------------------------------------------------------------*         
+FC UPDTCMS  DELAYED                                                             
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define screen update mode: ANYMODE will let messages be inserted *         
+*    into the BASIC mode screen even while the program is operating   *         
+*    in another mode.                                                 *         
+*---------------------------------------------------------------------*         
+FC UPDTSCRN ANYMODE                                                             
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define user data to be inserted into bottom line                 *         
+*---------------------------------------------------------------------*         
+*C USERBOTL BASIC  PF4: MON      PF12: ?                                        
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define user data to be used as default header info               *         
+*---------------------------------------------------------------------*         
+FC USERHDR  Performance Toolkit for VM                                          
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Define user variables which you often need as input for graphics *         
+*    (GRAPHxxx or PLOTxxx commands). The following are just a few     *         
+*    simple examples to show how it works:                            *         
+*---------------------------------------------------------------------*         
+* USERCP  = CP 'overhead' which can be attributed to users                      
+FC USERVAR SET USERCP   = %CP - %SY                                             
+FC USERVAR SET USERCP   DESCR USER %CP                                          
+* USERINQ = the total number of in-queue users (dispatch+eligible lists)        
+FC USERVAR SET USERINQ  = Q1 + Qx + E1 + Ex                                     
+FC USERVAR SET USERINQ  DESCR USERS IN-Q                                        
+* CPU/TR  = amount of CPU used per transaction (trivial + non-trivial),         
+*           in milliseconds                                                     
+FC USERVAR SET 'CPU/TR' = CPU*100 / ('TR/S'+'NT/S')                             
+FC USERVAR SET 'CPU/TR' DESCR CPU MSEC/TR                                       
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Set user load thresholds (can be set only when permanent         *         
+*    perf. data collection has previously been activated)             *         
+*---------------------------------------------------------------------*         
+FC USRLIMIT  *  %CPU  30  5/10  WEIGHT 10                                       
+FC USRLIMIT  *  IO/S  50  5/10  WEIGHT 10                                       
+*                                                                               
+*---------------------------------------------------------------------*         
+*    Execute other commands for customizing PERFKIT                   *         
+*---------------------------------------------------------------------*         
+*    The example sorts users in %CPU load sequence, and I/O devices             
+*    in I/O rate sequence. Remove the asterisks to activate it (works           
+*    only with priv. class 'E', causes exit from PERFKIT otherwise)             
+*MONITOR                                                                        
+*  SORT USER %CPU                                                               
+*  SORT DEV  I/O                                                                
+*  SORT CACH IO/S                                                               
+*  SORT UPAG READS                                                              
+*QUIT                                                                           
+*    End of example for sorting                                                 
+*                                                                               
+*    End of Performance Toolkit for VM profile                                  

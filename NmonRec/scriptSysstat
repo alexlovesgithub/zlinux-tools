@@ -1,0 +1,13 @@
+#!/bin/sh
+
+delay=$1
+count=$2
+path=$3
+flag=$4
+
+iostat -d -x ${delay} ${count} | perl -ane 'use POSIX qw(strftime); $t=strftime "%m/%d/%Y %H:%M:%S",localtime; print "$t $_"' | sed "/Linux/d" | sed "/^$/d" | sed "/Device:/d" > ${path}.iostat &
+vmstat -n -S K ${delay} ${count} | perl -ane 'use POSIX qw(strftime); $t=strftime "%m/%d/%Y %H:%M:%S",localtime; print "$t $_"' | sed "/r *b/d" | sed "/procs/d" > ${path}.vmstat &
+if [ "${flag}" == "1" ] ; then
+	pidstat -r -u -p ALL ${delay} ${count} | grep -f ${path}.PID > ${path}.pidstat &
+fi
+exit 0
